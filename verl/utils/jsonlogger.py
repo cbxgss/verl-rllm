@@ -1,5 +1,6 @@
 import json
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 import wandb
 
@@ -34,6 +35,21 @@ class JSONLogger:
         with open(os.path.join(self.dir_path, 'config.json'), 'w') as f:
             json.dump(self.config, f, indent=4)
 
+    @staticmethod
+    def _convert_numpy(obj):
+        if isinstance(obj, dict):
+            return {k: JSONLogger._convert_numpy(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [JSONLogger._convert_numpy(v) for v in obj]
+        elif isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return obj
+
     def log(self, data, step=None):
         # 从 0 开始
         self.save_config()
@@ -47,12 +63,9 @@ class JSONLogger:
             if len(self.logs[key]) <= step:
                 self.logs[key].extend([None] * (step - len(self.logs[key]) + 1))
             self.logs[key][step] = value
+        self.logs = self._convert_numpy(self.logs)
         with open(self.file_path, 'w') as f:
-            try:
-                json.dump(self.logs, f, indent=4)
-            except TypeError as e:
-                print(f"Error saving logs: {e}")
-                breakpoint()
+            json.dump(self.logs, f, indent=4)
 
     def show(self):
         png_path = os.path.join(self.dir_path, 'logs.png')
