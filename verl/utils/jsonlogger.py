@@ -47,9 +47,12 @@ class JSONLogger:
             if len(self.logs[key]) <= step:
                 self.logs[key].extend([None] * (step - len(self.logs[key]) + 1))
             self.logs[key][step] = value
-
         with open(self.file_path, 'w') as f:
-            json.dump(self.logs, f, indent=4)
+            try:
+                json.dump(self.logs, f, indent=4)
+            except TypeError as e:
+                print(f"Error saving logs: {e}")
+                breakpoint()
 
     def show(self):
         png_path = os.path.join(self.dir_path, 'logs.png')
