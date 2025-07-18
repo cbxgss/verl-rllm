@@ -79,6 +79,9 @@ setup(
     description="verl: Volcano Engine Reinforcement Learning for LLM",
     install_requires=install_requires,
     extras_require=extras_require,
+    dependency_links=[
+        "https://download.pytorch.org/whl/cu118"
+    ]
     package_data={
         "": ["version/*"],
         "verl": ["trainer/config/*.yaml"],
