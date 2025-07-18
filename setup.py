@@ -81,7 +81,7 @@ setup(
     extras_require=extras_require,
     dependency_links=[
         "https://download.pytorch.org/whl/cu118"
-    ]
+    ],
     package_data={
         "": ["version/*"],
         "verl": ["trainer/config/*.yaml"],
