@@ -24,7 +24,6 @@ with open(os.path.join(version_folder, "verl/version/version")) as f:
     __version__ = f.read().strip()
 
 install_requires = [
-    "torch==2.7.0+cu118",
     "accelerate",
     "codetiming",
     "datasets",
@@ -79,9 +78,6 @@ setup(
     description="verl: Volcano Engine Reinforcement Learning for LLM",
     install_requires=install_requires,
     extras_require=extras_require,
-    dependency_links=[
-        "https://download.pytorch.org/whl/cu118"
-    ],
     package_data={
         "": ["version/*"],
         "verl": ["trainer/config/*.yaml"],
